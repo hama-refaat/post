@@ -66,7 +66,7 @@ return gmdate("H:i:s", str_replace("-", null, explode(".", ($a - microtime(true)
 }
 empty($argv[1]) ? die("Undefined Text Please Run The File In This Syntax:\n php " . $argv[0] . " \"TEXT MESSAGE\"\n") : null;
 mb_strlen($argv[1]) > 4096 ? die("Error Characters Limited For 4096 And The Entered Is " . mb_strlen($argv[1]) . "\n") : null;
-$token = readline("Enter Bot Token : ");
+$token = readline("تۆکینی بۆتت بنوسە : ");
 @$bot = bot('Getme');
 if (!$bot->ok) {
 $token = readline("تۆکین هەڵەیە دووبارە هەوڵبدەوە: ");
