@@ -64,30 +64,30 @@ function bot($method, $datas = []) {
 function cin($a) {
 return gmdate("H:i:s", str_replace("-", null, explode(".", ($a - microtime(true))) [0]));
 }
-empty($argv[1]) ? die("تکایە کارابکە:\n php " . $argv[0] . " \"TEXT MESSAGE\"\n") : null;
-mb_strlen($argv[1]) > 4096 ? die("ببوورە هەڵەیەک هەیە" . mb_strlen($argv[1]) . "\n") : null;
-$token = readline("تۆکین دانێ لێرە : ");
+empty($argv[1]) ? die("Tkaya kara bkawa:\n php " . $argv[0] . " \"TEXT MESSAGE\"\n") : null;
+mb_strlen($argv[1]) > 4096 ? die("Bbwra token hallaya" . mb_strlen($argv[1]) . "\n") : null;
+$token = readline("Token bnwsa : ");
 @$bot = bot('Getme');
 if (!$bot->ok) {
-$token = readline("تۆکین هەڵەیە دووبارە هەوڵبدەوە: ");
+$token = readline("Token hallaya tkaya dwbara hawll bdawa: ");
 @$bot = bot('Getme');
 }
 $bot->ok ? null : die("Bad Token . exit \n");
-$print->color("===========ڕۆبۆت==========\n", 'yellow', 'black');
-$printedtext = "ناسنامە: " . $bot->result->id . "\n";
-$printedtext.= "ناوو: " . $bot->result->first_name . "\n";
-$printedtext.= "پێناسە: @" . $bot->result->username . "\n";
+$print->color("===========BOTI Hama Refaat==========\n", 'yellow', 'black');
+$printedtext = "ID: " . $bot->result->id . "\n";
+$printedtext.= "Name: " . $bot->result->first_name . "\n";
+$printedtext.= "User: @" . $bot->result->username . "\n";
 $print->color($printedtext, "cyan", "black");
 $print->color("========================\n", 'yellow', 'black');
-$path = readline("ئیستا لینکی ناسنامەی بەکارهێنەرەکانی بۆتت دانێ: ");
+$path = readline("esta linke file hallgrtni id bakahernakan dani: ");
 if (filter_var($path, FILTER_SANITIZE_URL)) {
 $filename = end(explode("/", $path));
 $print->color("Downloading " . $filename . "\n", 'yellow', 'black');
-copy($path, $filename) ? print ("File Downloaded\n") : die(print ("هەڵەیە ناتوانێ بەردەوام بێ لە داگرتن " . $filename . "\n"));
+copy($path, $filename) ? print ("File Downloaded\n") : die(print ("hallaya nawtanm dabazinm " . $filename . "\n"));
 $path = $filename;
 }
 if (!file_exists($path)) {
-$path = readline("درووست نیە " . $path . " لینکی ناسنامەی بەکارهێنەرەکانت دانێوە دووبارە: ");
+$path = readline("hallaya " . $path . " linke nasnamay andakant dwbara dani: ");
 }
 file_exists($path) ? null : die($path . " File Not exists . exit\n");
 $requset = file_get_contents($path);
@@ -101,32 +101,32 @@ if (!is_numeric($name)) {
 } elseif (end(explode(".", $path)) == "txt") {
 $ids = explode("\n", $requset);
 }
-empty($ids[1]) ? die("ئیستا لینکی فایلی ناسنامەی بەکارهێنەرەکانی بۆتت دانێ " . $path . "\n") : null;
-$count = count($ids);
-$fail = Array();
-system("clear");
-$print->color("ناردنی پەیام دەستی پێ کرد بۆ " . $count . " id's\n", "cyan", "black");
-$start = microtime(true);
-for ($x = 0;$x < count($ids);$x++) {
-if (!is_numeric($ids[$x])) continue;
-@$res = bot('sendmessage', ['chat_id' =>$ids[$x],'text' => $argv[1], 'parse_mode' => 'MARKDOWN'])->ok;
-if (!$res) {
-print ($x . " > ناتوانم نامە بۆ ئەمە بنێرم: " . $ids[$x] . "\n");
-$fail[] = $ids[$x];
-} elseif ($res) {
-$print->color($x . " > نامە ناردرا بۆی: " . $ids[$x] . "\n", "light_green", "black");
-}
-//time_nanosleep(0, 500000000);
- 
+empty($ids[1]) ? die("Eta linke faile hallgri id andamakant dai " . $path . "\n") : null;
+ $count = count($ids);
+ $fail = Array();
+ system("clear");
+ $print->color("Nardni nama dasy pe krd bo " . $count . " id's\n", "cyan", "black");
+ $start = microtime(true);
+ for ($x = 0;$x < count($ids);$x++) {
+ if (!is_numeric($ids[$x])) continue;
+ @$res = bot('sendmessage', ['chat_id' =>$ids[$x],'text' => $argv[1], 'parse_mode' => 'MARKDOWN'])->ok;
+ if (!$res) {
+ print ($x . " > Natwanm nama bnirm bo: " . $ids[$x] . "\n");
+ $fail[] = $ids[$x];
+ } elseif ($res) {
+ $print->color($x . " > nama nardra boy: " . $ids[$x] . "\n", "light_green", "black");
+ }
+ //time_nanosleep(0, 500000000);
+  
 }
 $a = array_values(array_diff($ids, $fail));
 file_exists($bot->result->username . ".json") ? unlink($bot->result->username . ".json") : null;
 file_put_contents($bot->result->username . ".json", json_encode($a, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK), LOCK_EX);
-$result = "ناردنی پەیام تەواوو بوو:\n";
-$result.= "ڕۆبۆت: " . $bot->result->username . ", " . $path . "\n";
-$result.= "ژمارەی ئەندامەکان: " . $count . "\n";
-$result.= "ناردراوەکان: " . count($a) . "\n";
-$result.= "نەنارداوەکان: " . count($fail) . "\n";
-$result.= "تەواوبوو لە: " . cin($start) . "\n";
+$result = "nardni nama taw bw:\n";
+$result.= "BOT: " . $bot->result->username . ", " . $path . "\n";
+$result.= "Hamw andamakan: " . $count . "\n";
+$result.= "Namaian bo chwa: " . count($a) . "\n";
+$result.= "Namaian Bo nachwa: " . count($fail) . "\n";
+$result.= "Tawaw bw kat: " . cin($start) . "\n";
 $result.= "by @hama_refaat ~ @hama_roberts \n";
 $print->color($result, "cyan", "black");
